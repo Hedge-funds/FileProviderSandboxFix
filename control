@@ -1,0 +1,9 @@
+Package: com.fa8fkwv.fileprovidersandboxfix
+Name: FileProviderSandboxFix
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: Fixes PlugInKit error 45 (ENOTSUP) in com.apple.UIKit.fileprovider.default on iOS 9.3.5 (Phoenix)
+Maintainer: FA8FKWV
+Author: FA8FKWV
+Section: Tweaks
+Depends: mobilesubstrate
