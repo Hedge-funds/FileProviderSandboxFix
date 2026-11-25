@@ -1,28 +1,36 @@
 # FileProviderSandboxFix
 
-A lightweight MobileSubstrate tweak for jailbroken 32-bit iOS 9.3.5 devices (Phoenix 6.0) that fixes the system file picker / attachment crash in apps like **Mail**, **Google Drive**, and **Safari**.
+A small MobileSubstrate tweak for jailbroken iOS 9.3.5 (armv7, Phoenix 6.0) that works around a crash of the system file picker in apps like Google Drive and Mail.
 
-## The Problem
+## Problem
 
-After activating the Phoenix 6.0 jailbreak on iOS 9.3.5, newly spawned processes do not receive a sandbox profile (`sandboxed=0`). When `com.apple.UIKit.fileprovider.default` starts, `PlugInKit` (`-[PKService checkEnvironment:]`) calls `sandbox_container_path_for_pid()`, receives `errno=45` (`ENOTSUP`), and aborts with:
+After Phoenix 6.0 is activated, newly spawned processes do not get a sandbox profile. When `com.apple.UIKit.fileprovider.default` starts, PlugInKit (`-[PKService checkEnvironment:]`) calls `sandbox_container_path_for_pid()`, gets `errno = 45` (`ENOTSUP`) and aborts:
 
-    plug-in has invalid sandbox or container: error 45 path ?
-    NSInternalInconsistencyException
+```text
+plug-in has invalid sandbox or container: error 45 path ?
+NSInternalInconsistencyException
+```
 
-Host apps then fail with `NSCocoaErrorDomain Code=4097` (*"Couldn't communicate with a helper application"*).
+The host app then fails with `NSCocoaErrorDomain Code=4097` ("Couldn't communicate with a helper application").
 
-## How It Works
+## What the tweak does
 
-The tweak injects **only** into `com.apple.UIKit.fileprovider.default`, hooks `sandbox_container_path_for_pid`, and when the kernel returns `ENOTSUP` (`45`), provides a valid fallback directory (`/var/mobile/Library/Caches/com.apple.UIKit.fileprovider.default`) and clears `errno`.
+It is injected only into `com.apple.UIKit.fileprovider.default` and hooks `sandbox_container_path_for_pid`. If the call fails with `ENOTSUP`, it returns the fallback directory `/var/mobile/Library/Caches/com.apple.UIKit.fileprovider.default` and clears `errno`.
 
-## Building
+## Limitations
 
-Requires [Theos](https://theos.dev/) with an iOS 9.3 SDK (`armv7`):
+This is a workaround, not a fix of the root cause. The extension still runs without a sandbox; the tweak only makes the PlugInKit check pass. The returned path is a fallback, not the real container.
 
-    make package FINALPACKAGE=1
+## Build
 
-> **Note for iOS 9.3.5:** If building on WSL/Linux, sign the resulting `.dylib` on-device with `/usr/bin/ldid -S` to avoid invalid code signatures.
+Requires Theos and an iOS 9.3 SDK (armv7):
+
+```sh
+make package FINALPACKAGE=1
+```
+
+If you build on Linux/WSL and get invalid code signature errors, sign the dylib on the device with `ldid -S`.
 
 ## License
 
-MIT — Copyright (c) 2026 FA8FKWV
+MIT, Copyright (c) 2026 FA8FKWV
