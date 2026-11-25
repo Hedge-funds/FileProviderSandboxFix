@@ -3,7 +3,7 @@
  * Author: FA8FKWV
  *
  * Fixes PlugInKit crash ("plug-in has invalid sandbox or container: error 45 path ?")
- * in com.apple.UIKit.fileprovider.default on iOS 9.3.5 with Phoenix jailbreak.
+ * in com.apple.UIKit.fileprovider.default on iOS 9.3.5 with Carbon jailbreak.
  */
 
 #import <Foundation/Foundation.h>

@@ -1,10 +1,10 @@
 # FileProviderSandboxFix
 
-A small MobileSubstrate tweak for jailbroken iOS 9.3.5 (armv7, Phoenix 6.0) that works around a crash of the system file picker in apps like Google Drive and Mail.
+A small MobileSubstrate tweak for jailbroken iOS 9.3.5 (armv7, Carbon) that works around a crash of the system file picker in apps like Google Drive and Mail.
 
 ## Problem
 
-After Phoenix 6.0 is activated, newly spawned processes do not get a sandbox profile. When `com.apple.UIKit.fileprovider.default` starts, PlugInKit (`-[PKService checkEnvironment:]`) calls `sandbox_container_path_for_pid()`, gets `errno = 45` (`ENOTSUP`) and aborts:
+After the Carbon jailbreak is run, newly spawned processes do not get a sandbox profile. When `com.apple.UIKit.fileprovider.default` starts, PlugInKit (`-[PKService checkEnvironment:]`) calls `sandbox_container_path_for_pid()`, gets `errno = 45` (`ENOTSUP`) and aborts:
 
 ```text
 plug-in has invalid sandbox or container: error 45 path ?
@@ -34,3 +34,7 @@ If you build on Linux/WSL and get invalid code signature errors, sign the dylib 
 ## License
 
 MIT, Copyright (c) 2026 FA8FKWV
+
+## Tested on
+
+iPad 2 (iPad2,1), iOS 9.3.5 (13G36), jailbroken with [Carbon](http://carbon.sep.lol). Not tested with other jailbreaks (e.g. Phoenix, p0laris).
